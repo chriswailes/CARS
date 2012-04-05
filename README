@@ -1,0 +1,11 @@
+Chris's Advanced RPC Suite (CARS) is a fast RPC package for Ruby.  It was motivated by the fact that the xmlrpc library that is currently in the core
+distribution uses WEBrick and REXML, both of which are slower that alternatives such as Mongrel and ruby-libxml.  The use of these faster libraries has resulted in a speedup of 4x to 7x.
+
+While Mongrel and ruby-libxml are the preferred (and default) choices for the HTTP server and XML parser, CARS is written in a modular way and can support
+other server and parser back ends.  Currently there is support for the WEBrick server, and planned support for the REXML library.
+
+CARS offers several other advantages over the standard xmlrpc library as well. The first of these is that CARS understands more ISO 8601 time formats and is therefor able to work with a wider variety of clients.  Another advantage is that CARS can compress the output of both its client and server.  Because these are XML documents, which compress very well, a lot of bandwidth can be saved in this manner.  Both the level of compression and the size at which documents start to be zipped are configurable for the server and the client.
+
+One of the major features of CARS is the ability to define wildcard procedures.  These in no way interfere with the XML-RPC standard and are only an alternative way of defining functions.  They work by defining procedures with wildcards in there names as one of the sections between periods such as such as *_.list*.  If the server receives a call for a procedure that isn't explicitly defined it will search for any wildcard procedure that works.  In this case a call for the *people.list* procedure would be passed to the block of the wildcard procedure with 'people' as the first parameter.
+
+CARS also supports before and after block chains.  These are proc objects that are run before and after all procedure calls, and are passed the RPC object that represents the current call as well as the HTTP headers from the HTTP server as parameters.  If they return `true` the server will immediately stop evaluation and return the current `result` value of RPC object.  Uses for these features include access control, pre-processing of parameters, and post-processing of return values.
